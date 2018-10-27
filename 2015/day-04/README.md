@@ -13,3 +13,4 @@ For example:
 
 Now find one that starts with ```six zeroes```.
 
+**Puzzle Input**: ```bgvyzdsv```
