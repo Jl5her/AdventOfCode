@@ -18,13 +18,13 @@ def part2(string):
     perimeter = 2 * (l + w + h - max(l,w,h))
     return perimeter + area
 
-with open("inputs/day2.txt") as f:
-    total_paper = 0
-    total_ribbon = 0
+with open("input.txt") as f:
+    paper = 0
+    ribbon = 0
 
     for line in f.readlines():
-        total_paper += part1(line)
-        total_ribbon += part2(line)
+        paper += part1(line)
+        ribbon += part2(line)
         
-    print("Wrapping Paper: " + str(total_paper))
-    print("Ribbon: " + str(total_ribbon))
+    print(paper)
+    print(ribbon)

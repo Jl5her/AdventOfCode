@@ -33,7 +33,7 @@ def part2(string):
     return len(set(a))
 
 
-with open("inputs/day3.txt") as f:
+with open("input.txt") as f:
     string = f.read()
     print(part1(string))
     print(part2(string))
