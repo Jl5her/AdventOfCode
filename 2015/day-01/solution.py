@@ -7,7 +7,7 @@ def part2(string):
             return pos
 
 with open("input.txt") as f:
-    print(part1(f.read()))
-
-with open("input.txt") as f:
-    print(part2(f.read()))
+    contents = f.read()
+    
+    print(part1(contents))
+    print(part2(contents))
