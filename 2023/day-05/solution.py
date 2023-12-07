@@ -1,67 +1,59 @@
-DEBUG = False
+from functools import reduce
 
 with open('input.txt') as f:
     lines = f.read()
 
 [seeds, *maps] = lines.split('\n\n')
 
-functions = []
 
-
-def debug(msg='', end='\n'):
-    if DEBUG:
-        print(msg, end=end)
-
-
-def add_func(name, m):
+def make_func(name, m):
     def func(n):
         for [dst, src, l] in m:
-            if src <= n <= src + l:
-                debug(f"{name}: {dst + n - src}", end=' -> ')
+            if src <= n < src + l:
                 return dst + n - src
 
-        debug(f"{name}: {n}", end=' -> ')
         return n
 
-    functions.append(func)
+    return func
 
+
+functions = []
+ifunctions = []
 
 for mapping in maps:
     name = mapping.split('\n')[0]
-    name = name.split(' ')[0].split('-')[2]
+    name = name.split(' ')[0].split('-')
 
     mapping = [list(map(int, t.split(' '))) for t in mapping.split('\n')[1:]]
     # mapping.sort(key=lambda x: x[1])
 
-    add_func(name, mapping)
+    functions.append(make_func(name[2], mapping))
 
-loc_seed = {}
+    mapping = [[src,dst,l] for [dst, src,l] in mapping]
 
+    ifunctions.append(make_func(name[0], mapping))
 
-def get_loc(seed):
-    loc = seed
-    debug(f"seed: {loc}", end=' -> ')
-    for f in functions:
-        loc = f(loc)
-
-    debug()
-    loc_seed[loc] = seed
-
-    return seed
-
+ifunctions.reverse()
 
 seeds = list(map(int, seeds.split(' ')[1:]))
-print(f"Part 1: {min(map(get_loc, seeds))}")
 
-loc_seed = {}
-# DEBUG = True
+part1 = min([reduce(lambda cur, m: m(cur), functions, seed) for seed in seeds])
+print(f"Part 1: {part1}")
 
-mini_ranges = []
-for [start, l] in zip(*[seeds[i::2] for i in range(2)]):
+# Part 2
+def is_seed(seed):
+    for [start, l] in zip(seeds[0::2], seeds[1::2]):
+        if start <= seed <= start + l:
+            return True
+    return False
 
-    for seed in range(start, start + l):
-        get_loc(seed)
-print([list(zip(seeds, [1] * len(seeds))), list(zip(seeds[0::2], seeds[1::2]))])
 
-# print(f"Part 2: {min(loc_seed.keys())}")
-print("Done")
+loc = 0
+while True:
+    seed = reduce(lambda cur, m: m(cur), ifunctions, loc)
+
+    if is_seed(seed):
+        print(f"Part 2: {loc}")
+        break
+
+    loc += 1
