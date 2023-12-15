@@ -1,10 +1,10 @@
-import functools
+from functools import reduce
 
 with open('input.txt') as f:
     puzzle_input = f.read()
 
 words = puzzle_input.split(',')
-part1 = sum(map(lambda word: functools.reduce(lambda v, c: ((v + ord(c)) * 17) % 256, word, 0), words))
+part1 = sum(map(lambda word: reduce(lambda v, c: ((v + ord(c)) * 17) % 256, word, 0), words))
 
 print(f"Part 1: {part1}")
 
@@ -20,7 +20,7 @@ for word in words:
     label = word[:op_index]
     focal_length = word[op_index + 1:]
 
-    box = str(functools.reduce(lambda v, c: ((v + ord(c)) * 17) % 256, label, 0))
+    box = str(reduce(lambda v, c: ((v + ord(c)) * 17) % 256, label, 0))
 
     if op == "=":
         index = -1
